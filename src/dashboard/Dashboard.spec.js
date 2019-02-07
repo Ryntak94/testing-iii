@@ -71,17 +71,23 @@ describe('Test to make sure Display and Controls click events work properly',   
         const display = render(<Display closed={true} locked={true}/>);
         const controls = render(<Dashboard />)
         render(<Controls />)
-        // const closeButton = controls.getByText(/close gate/i);
-        // const lockButton = controls.getByText(/lock gate/i);
-        // fireEvent.click(closeButton);
-        // fireEvent.click(lockButton);
         const closed = display.getByText(/closed/i)
         const locked = display.getByText(/locked/i)
-        // expect(closeButton).toHaveTextContent(/open gate/i);
-        // expect(lockButton).toHaveTextContent(/unlock gate/i);
         expect(closed).toHaveTextContent(/closed/i)
         expect(locked).toHaveTextContent(/locked/i)
         expect(locked).toHaveClass('red-led');
         expect(closed).toHaveClass('red-led');
+    })
+    test('Test to make sure lock is disabled when gate is open',  ()  =>  {
+        const controls = render(<Controls/>)
+        const display = render(<Display/>)
+        const lockButton = controls.getByText(/lock gate/i);
+        expect(lockButton).toHaveProperty('disabled', true);
+    })
+    test('Test to make sure open is disabled when gate is locked',  ()  =>  {
+        const controls = render(<Controls locked={true} closed={true}/>)
+        const display = render(<Display/>)
+        const openButton = controls.getByText(/open gate/i);
+        expect(openButton).toHaveProperty('disabled', true);
     })
 })
